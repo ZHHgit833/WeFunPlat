@@ -1,0 +1,119 @@
+﻿
+@{
+    Layout = null;
+}
+@using WeFunModel;
+@model BlackRoom
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>修改</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/Content/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/Content/css/public.css" media="all">
+    <script src="/Content/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        layui.use(['form', 'laydate'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                laydate = layui.laydate;
+                //layer = layui.layer;
+                
+
+            //日期
+            laydate.render({
+                elem: '#BeginDate'
+            });
+            laydate.render({
+                elem: '#EndDate'
+            });
+
+
+            $("#btnUpt").click(function () {
+                var o = new Object();
+                o.BRID = $("#BRID").val();
+                o.ID = $("#ID").val();
+                o.Remake = $("#Remake").val();
+                o.BeginDate = $("#BeginDate").val();
+                o.EndDate = $("#EndDate").val();
+                o.State = $("input[name='state']:checked").val();;
+                $.post("/StudioArea/BlackRooms/EditUser", o, function (d) {
+                    if (d == "Success") {
+                        layer.msg("修改成功！");
+                        parent.layer.close(iframeIndex);
+                        parent.location.reload();
+                    }
+                    else {
+                        layer.msg("修改失败！");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <form class="layui-form" action="" lay-filter="example">
+                <input type="hidden" id="BRID" name="BRID" value="@Model.BRID" />
+                <div class="layui-form-item">
+                    <label class="layui-form-label">ID</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="ID" name="ID" lay-verify="title" autocomplete="off" class="layui-input" value="@Model.ID">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">Remake</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="Remake" name="Remake" autocomplete="off" class="layui-input" value="@Model.Remake">
+                    </div>
+                </div>
+                @*<div class="layui-form-item">
+                    <label class="layui-form-label">BeginDate</label>
+                    <div class="layui-input-block">
+                        <input type="text" value='@Model.BeginDate.ToString("yyyy-MM-dd")' id="TimeBegin" name="TimeBegin" lay-verify="date" autocomplete="off" class="layui-input" required>
+                    </div>
+                </div>*@
+                <div class="layui-form-item">
+                    <label class="layui-form-label">BeginDate</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="BeginDate" name="BeginDate" lay-verify="title" autocomplete="off" class="layui-input" value='@Model.BeginDate.ToString("yyyy-MM-dd")'>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">EndDate</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="EndDate" name="EndDate" lay-verify="title" autocomplete="off" class="layui-input" value='@Model.EndDate.ToString("yyyy-MM-dd")'>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        @{ if (Model.State == 0)
+                            {
+                                <input type="radio" name="state" value="0" title="继续关着" checked="checked">
+                                <input type="radio" name="state" value="1" title="放出">
+                            }
+                            else
+                            {
+                                <input type="radio" name="state" value="0" title="继续关着" checked="">
+                                <input type="radio" name="state" value="1" title="放出" checked="checked">
+                            }
+                        }
+
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input class="layui-btn" id="btnUpt" value="立即提交" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
